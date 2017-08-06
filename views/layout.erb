@@ -1,0 +1,13 @@
+<html>
+<title>Budget</title>
+<link rel="stylesheet" href="/stylesheets/main.css">
+<body>
+  <% if session[:messages] %>
+    <% loop do %>
+      <p class="message"><%= session[:messages].shift %></p>
+      <% break if session[:messages].empty? %>
+    <% end %>
+  <% end %>
+  <%= yield %>
+</body>
+</html>

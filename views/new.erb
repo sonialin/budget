@@ -1,0 +1,11 @@
+<form action="/new" method="post">
+  <label for="name">Item name</label>
+  <input name="item_name" value="<%= params[:item_name] %>" /><br />
+  <label for="amount">Dollar amount</label>
+  <input name="amount"  value="<%= params[:amount] %>" /><br />
+  <label for="month">Month</label>
+  <input name="month"  value="<%= params[:month] %>" />
+  <label for="year">Year</label>
+  <input name="year"  value="<%= params[:year] %>" /><br />
+  <button type="submit">Submit</button>
+</form>

@@ -10,11 +10,14 @@ end
 before do
   session[:messages] ||= []
   @budgets = JSON.parse(File.read("data/budgets.json"))
+  
+  group_budgets_by_month
+  calculate_monthly_budgets
 end
 
 helpers do
-  def sort_by_month(budgets)
-    budgets.sort_by{|budget| Date.parse(budget["Month"]) }.reverse
+  def sort_by_month(monthly_budgets)
+    monthly_budgets.sort_by{|month, budgets| Date.parse(month) }
   end
 
   def parse_currency(amount)
@@ -22,14 +25,50 @@ helpers do
   end
 end
 
-def update_budgets(new_budget)
-  parsed_budget = {"Item Name" => new_budget["Item Name"].strip, 
-                    "Amount" => new_budget["Amount"].to_f,
-                    "Month" => "#{new_budget['Month']}-#{new_budget['Year']}"
-                  }
+def group_budgets_by_month
+  @budgets_by_month = {}
+  @budgets.each do |budget|
+    if !@budgets_by_month[budget['Month']]
+      @budgets_by_month[budget['Month']] = [budget]
+    else
+      @budgets_by_month[budget['Month']] << budget
+    end
+  end
+end
+
+def calculate_monthly_budgets
+  @monthly_budgets = {}
+  @budgets_by_month.each do |month, budgets|
+    if !@monthly_budgets[month]
+      @monthly_budgets[month] = 0
+    end
+    budgets.each do |budget|
+      @monthly_budgets[month] += budget['Amount']
+    end
+  end
+end
+
+def format_month(input_month)
+  if (1..9).include? input_month.to_i
+    '0' + input_month.to_i.to_s
+  else
+    input_month
+  end
+end
+
+def update_budgets(new_budget = nil)
+  if new_budget
+    parsed_budget = {"Item Name" => new_budget["Item Name"], 
+                      "Amount" => new_budget["Amount"].to_f,
+                      "Month" => "#{new_budget['Year']}/#{format_month(new_budget['Month'])}",
+                      "Created at" => Time.now
+                    }
+
+    @budgets << parsed_budget
+  end
 
   File.open("data/budgets.json", "w") do |f|
-    f.write(JSON.pretty_generate(@budgets << parsed_budget))
+    f.write(JSON.pretty_generate(@budgets))
   end
 end
 
@@ -64,7 +103,7 @@ get "/new" do
 end
 
 post "/new" do
-  new_budget = {"Item Name" => params[:item_name],
+  new_budget = {"Item Name" => params[:item_name].strip,
             "Amount" => params[:amount],
             "Month" => params[:month],
             "Year" => params[:year]}
@@ -76,4 +115,13 @@ post "/new" do
     session[:messages] << "New budget is added."
     redirect "/"
   end
+end
+
+post "/:created_at/delete" do
+  created_at = params[:created_at]
+  budget = @budgets.find {|budget| budget["Created at"] == params[:created_at]}
+  @budgets.delete(budget)
+  update_budgets
+  session[:messages] << "A budget is deleted."
+  redirect "/"
 end

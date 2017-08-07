@@ -1,12 +1,38 @@
 [
   {
-    "Item Name": "groceries",
-    "Amount": 300.0,
-    "Month": "09-2017"
+    "Item Name": "Phone bill",
+    "Amount": 38.0,
+    "Month": "2017/08",
+    "Created at": "2017-08-06 21:07:17 -0500"
   },
   {
-    "Item Name": "rent",
-    "Amount": 600.0,
-    "Month": "10-2017"
+    "Item Name": "groceries",
+    "Amount": 150.0,
+    "Month": "2017/09",
+    "Created at": "2017-08-06 21:32:16 -0500"
+  },
+  {
+    "Item Name": "pet supplies",
+    "Amount": 150.0,
+    "Month": "2017/07",
+    "Created at": "2017-08-06 21:33:49 -0500"
+  },
+  {
+    "Item Name": "electric bill",
+    "Amount": 40.0,
+    "Month": "2017/07",
+    "Created at": "2017-08-06 21:39:43 -0500"
+  },
+  {
+    "Item Name": "trip",
+    "Amount": 500.0,
+    "Month": "2018/01",
+    "Created at": "2017-08-06 21:49:00 -0500"
+  },
+  {
+    "Item Name": "launchschool",
+    "Amount": 200.0,
+    "Month": "2017/09",
+    "Created at": "2017-08-06 21:52:13 -0500"
   }
 ]

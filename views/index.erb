@@ -1,16 +1,28 @@
-<a href="/new">Enter a new budget</a>
-
-<table>
-  <tr>
-    <th>Item Name</th>
-    <th>Amount</th>
-    <th>Month</th>
-  </tr>
-  <% sort_by_month(@budgets).each do |budget| %>
-    <tr>
-      <td><%= budget["Item Name"] %></td>
-      <td><%= parse_currency(budget["Amount"]) %></td>
-      <td><%= budget["Month"] %></td>
+<% sort_by_month(@budgets_by_month).each do |month, budgets| %>
+  <table class="budget-table">
+    <tr class="monthly-title">
+      <th><%= month %></th>
+      <th colspan=2>Total: <%= @monthly_budgets[month] %></th>
     </tr>
+    <tr>
+      <th>Item Name</th>
+      <th>Amount</th>
+      <th>Month</th>
+    </tr>
+    
+    <% budgets.each do |budget| %>
+      <tr>
+        <td><%= budget["Item Name"] %></td>
+        <td><%= parse_currency(budget["Amount"]) %></td>
+        <td><%= budget["Month"] %></td>
+        <td>
+          <form action="<%= budget['Created at'] %>/delete" method="post">
+            <button type=submit>Delete</button>
+          </form>
+        </td>
+      </tr>
+    <% end %>
   <% end %>
 </table>
+
+<a href="/new">Enter a new budget</a>

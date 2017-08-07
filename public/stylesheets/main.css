@@ -1,0 +1,11 @@
+.budget-table {
+  margin-bottom: 10px;
+}
+
+.budget-table td, .budget-table th  {
+  padding: 5px;
+}
+
+.budget-table .monthly-title {
+  font-size: 1.3em;
+}

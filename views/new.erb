@@ -1,11 +1,12 @@
+<h2>Please enter a new budget</h2>
 <form action="/new" method="post">
   <label for="name">Item name</label>
-  <input name="item_name" value="<%= params[:item_name] %>" /><br />
+  <input name="item_name" value="<%= params[:item_name] %>" placeholder="e.g. Phone bill" /><br />
   <label for="amount">Dollar amount</label>
-  <input name="amount"  value="<%= params[:amount] %>" /><br />
+  <input name="amount"  value="<%= params[:amount] %>" placeholder="e.g. 50.00" /><br />
   <label for="month">Month</label>
-  <input name="month"  value="<%= params[:month] %>" />
+  <input name="month"  value="<%= params[:month] %>" placeholder="e.g. <%= Time.now.month %>" />
   <label for="year">Year</label>
-  <input name="year"  value="<%= params[:year] %>" /><br />
+  <input name="year"  value="<%= params[:year] %>" placeholder="e.g. <%= Time.now.year %>" /><br />
   <button type="submit">Submit</button>
 </form>

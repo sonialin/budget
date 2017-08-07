@@ -21,7 +21,7 @@ helpers do
   end
 
   def parse_currency(amount)
-    sprintf("%0.02f", amount)
+    "$" + sprintf("%0.02f", amount)
   end
 end
 

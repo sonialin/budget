@@ -2,7 +2,7 @@
   <table class="budget-table">
     <tr class="monthly-title">
       <th><%= month %></th>
-      <th colspan=2>Total: <%= @monthly_budgets[month] %></th>
+      <th colspan=2>Total: <%= parse_currency(@monthly_budgets[month]) %></th>
     </tr>
     <tr>
       <th>Item Name</th>

@@ -1,11 +1,5 @@
 [
   {
-    "Item Name": "Phone bill",
-    "Amount": 38.0,
-    "Month": "2017/08",
-    "Created at": "2017-08-06 21:07:17 -0500"
-  },
-  {
     "Item Name": "groceries",
     "Amount": 150.0,
     "Month": "2017/09",
@@ -34,5 +28,11 @@
     "Amount": 200.0,
     "Month": "2017/09",
     "Created at": "2017-08-06 21:52:13 -0500"
+  },
+  {
+    "Item Name": "internet",
+    "Amount": 60.0,
+    "Month": "2017/08",
+    "Created at": "2017-08-07 19:46:38 -0500"
   }
 ]

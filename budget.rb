@@ -10,18 +10,17 @@ end
 before do
   session[:messages] ||= []
   @budgets = JSON.parse(File.read("data/budgets.json"))
-  
   group_budgets_by_month
   calculate_monthly_budgets
 end
 
 helpers do
   def sort_by_month(monthly_budgets)
-    monthly_budgets.sort_by{|month, budgets| Date.parse(month) }
+    monthly_budgets.sort_by { |month, _| Date.parse(month) }
   end
 
   def parse_currency(amount)
-    "$" + sprintf("%0.02f", amount)
+    "$" + format("%0.02f", amount)
   end
 end
 
@@ -48,21 +47,20 @@ def calculate_monthly_budgets
   end
 end
 
-def format_month(input_month)
-  if (1..9).include? input_month.to_i
-    '0' + input_month.to_i.to_s
+def formatted_month(year, month)
+  if (1..9).cover? month.to_i
+    "#{year}/0#{month.to_i}"
   else
-    input_month
+    "#{year}/#{month}"
   end
 end
 
 def update_budgets(new_budget = nil)
   if new_budget
-    parsed_budget = {"Item Name" => new_budget["Item Name"], 
+    parsed_budget = { "Item Name" => new_budget["Item Name"],
                       "Amount" => new_budget["Amount"].to_f,
-                      "Month" => "#{new_budget['Year']}/#{format_month(new_budget['Month'])}",
-                      "Created at" => Time.now
-                    }
+                      "Month" => formatted_month(new_budget['Year'], new_budget['Month']),
+                      "Created at" => Time.now }
 
     @budgets << parsed_budget
   end
@@ -86,27 +84,33 @@ def empty_field?(budget)
 end
 
 def validate_amount(amount)
-  session[:messages] << "Please enter a valid dollar amount" if !(Float(amount) rescue false)
+  if !(Float(amount) rescue false)
+    session[:messages] << "Please enter a valid dollar amount"
+  end
 end
 
 def validate_date(month, year)
-  session[:messages] << "Please enter a valid month" if !(1..12).include? month.to_i
-  session[:messages] << "Please enter a valid year" if !(1900..2100).include? year.to_i
+  if !(1..12).cover? month.to_i
+    session[:messages] << "Please enter a valid month"
+  end
+  if !(1900..2100).cover? year.to_i
+    session[:messages] << "Please enter a valid year"
+  end
 end
 
-get "/" do 
+get "/" do
   erb :index
 end
 
-get "/new" do 
+get "/new" do
   erb :new
 end
 
 post "/new" do
-  new_budget = {"Item Name" => params[:item_name].strip,
-            "Amount" => params[:amount],
-            "Month" => params[:month],
-            "Year" => params[:year]}
+  new_budget = {  "Item Name" => params[:item_name].strip,
+                  "Amount" => params[:amount],
+                  "Month" => params[:month],
+                  "Year" => params[:year] }
 
   if empty_field?(new_budget) || invalid_input?(new_budget)
     erb :new
@@ -118,8 +122,7 @@ post "/new" do
 end
 
 post "/:created_at/delete" do
-  created_at = params[:created_at]
-  budget = @budgets.find {|budget| budget["Created at"] == params[:created_at]}
+  budget = @budgets.find { |bgt| bgt["Created at"] == params[:created_at] }
   @budgets.delete(budget)
   update_budgets
   session[:messages] << "A budget is deleted."
